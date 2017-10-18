@@ -43,12 +43,28 @@ columns, so the output looks better.
 
 import random
 import sys
+from collections import defaultdict
 
+def split_by_words(filename):
+    file = open(filename, 'r')
+    words = file.read().split()
+    return words
 
 def mimic_dict(filename):
-  """Returns mimic dict mapping each word to list of words which follow it."""
-  # +++your code here+++
-  return
+    """Returns mimic dict mapping each word to list of words which follow it."""
+    words_dict = defaultdict(list)
+    words = split_by_words(filename)
+    index = 1
+    for w in words:
+        if index < len(words):
+            if w.lower() in words_dict.keys():
+                words_dict[w.lower()].append(words[index].lower())
+            else:
+                words_dict[w.lower()] = [words[index].lower()]
+        else:
+            words_dict[w.lower()] = []
+        index += 1
+    return words_dict
 
 
 def print_mimic(mimic_dict, word):
