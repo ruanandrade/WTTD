@@ -38,9 +38,29 @@ print_words() and print_top().
 """
 
 import sys
+from collections import defaultdict
+
+def split_by_words(filename):
+    file = open(filename, 'r')
+    words = file.read().split()
+    return words
+
+def print_words(filename):
+    words_dict = {}
+    words = split_by_words(filename)
+    for w in words:
+        if w.lower() in words_dict.keys():
+            value = words_dict[w.lower()]
+            words_dict[w.lower()] = value + 1
+        else:
+            words_dict[w.lower()] = 1
+
+    for key in sorted(words_dict):
+        print("%s: %s" % (key, words_dict[key]))
 
 
-# +++your code here+++
+def print_top(filename):
+    return
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
