@@ -8,6 +8,7 @@
 
 import sys
 import re
+from csv import excel
 
 """Baby Names exercise
 
@@ -41,8 +42,35 @@ def extract_names(filename):
     followed by the name-rank strings in alphabetical order.
     ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
     """
-    # +++your code here+++
-    return
+    extracted = []
+
+    # Extract the year
+    pattern = re.compile("Popularity in \d{4}")
+    year = ""
+    for line in open(filename):
+        for match in re.finditer(pattern, line):
+            print(match.group())
+            year = match.group()
+
+    extracted.append(year.split(" ")[2])
+
+    # Extract the names
+    pattern = re.compile("<td>\d*</td><td>[a-zA-Z]*</td><td>[a-zA-Z]*</td>")
+    for line in open(filename):
+        for match in re.finditer(pattern, line):
+            current_names = match.group()
+            splited_names = re.split("(<td>|</td>)", current_names)
+            extracted.append(splited_names[6]+" "+splited_names[2])
+            extracted.append(splited_names[10] + " " + splited_names[2])
+
+    return sorted(extracted)
+
+def test(got, expected):
+    if got == expected:
+        prefix = ' OK '
+    else:
+        prefix = '  X '
+    print('%s got: %s expected: %s' % (prefix, repr(got), repr(expected)))
 
 
 def main():
@@ -60,11 +88,13 @@ def main():
     if args[0] == '--summaryfile':
         summary = True
         del args[0]
+        for file in args:
+            extracted = extract_names(file)
+            print(extracted)
+            test(len(extracted), 2001)
 
-        # +++your code here+++
         # For each filename, get the names, then either print the text output
         # or write it to a summary file
-
 
 if __name__ == '__main__':
     main()

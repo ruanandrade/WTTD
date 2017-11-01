@@ -11,19 +11,18 @@
 
 
 import sys
-import re
-import os
 import shutil
-import subprocess
+import zipfile
 
-"""Copy Special exercise
+def copy_file_todir(src, dest):
+    for file in src:
+        shutil.copy2(file, dest)
 
-"""
-
-
-# +++your code here+++
-# Write functions and modify main() to call them
-
+def copy_file_tozip(src, dest):
+    zipf = zipfile.ZipFile(dest + 'special.zip', 'w')
+    for file in src:
+        zipf.write(file)
+    zipf.close()
 
 def main():
     # This basic command line argument parsing code is provided.
@@ -53,9 +52,11 @@ def main():
         print("error: must specify one or more dirs")
         sys.exit(1)
 
-        # +++your code here+++
-        # Call your functions
+    if(len(todir) > 0):
+        copy_file_todir(args, todir)
 
+    if(len(tozip) > 0):
+        copy_file_tozip(args, tozip)
 
 if __name__ == "__main__":
     main()
